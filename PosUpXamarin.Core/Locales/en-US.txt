@@ -1,0 +1,14 @@
+﻿TV Shows = TV Shows
+Search TV Shows = Search TV Shows
+Popularity = Popularity
+Name = Name
+Overview = Overview
+Release Date = Release Date
+Genres = Genres
+Undefined = Undefined
+Search = Search
+You need an internet connection. Check your connection and try again. = You need an internet connection. Check your connection and try again.
+Try again = Try again
+No results found. = No results found.
+Oops ... There was an error. = Oops ... There was an error.
+Loading... = Loading...

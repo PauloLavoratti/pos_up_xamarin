@@ -1,0 +1,14 @@
+﻿TV Shows = Séries de TV
+Search TV Shows = Pesquisar Séries de TV
+Popularity = Popularidade
+Name = Nome
+Overview = Visão Geral
+Release Date = Data de Lançamento
+Genres = Gêneros
+Undefined = Indefinido
+Search = Pesquisar
+You need an internet connection. Check your connection and try again. = Você precisa de uma conexão com a internet. Verifique sua conexão e tente novamente.
+Try again = Tente novamente
+No results found. = Nenhum resultado encontrado.
+Oops ... There was an error. = Oops ... Ocorreu um erro.
+Loading... = Carregando...

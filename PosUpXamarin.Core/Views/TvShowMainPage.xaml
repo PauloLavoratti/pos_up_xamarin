@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:b="clr-namespace:Prism.Behaviors;assembly=Prism.Forms"
+    xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+    xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
+    xmlns:converters="clr-namespace:PosUpXamarin.Core.Converters;assembly=PosUpXamarin.Core"
+    prism:ViewModelLocator.AutowireViewModel="True"
+    x:Class="PosUpXamarin.Core.Views.TvShowMainPage"
+    Title="{Binding Title}">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:ItemTappedEventArgsConverter x:Key="itemTappedEventArgsConverter" />
+            <converters:ItemVisibilityEventArgsConverter x:Key="itemAppearingEventArgsConverter" />
+            <converters:NegateBooleanConverter x:Key="inverter" />
+            <converters:PopularityDescriptionConverter x:Key="popularityDescription" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem
+            AutomationId="Search"
+            Text="Search" Icon="ic_search_white.png"
+            Command="{Binding ShowSearchTvShowCommand}" />
+    </ContentPage.ToolbarItems>
+    <ContentPage.Content>
+        <StackLayout>
+            <ListView
+                x:Name="ItemsListView"
+                IsVisible="{Binding IsConnected}"
+                ItemsSource="{Binding TvShows}"
+                HasUnevenRows="true"
+                SeparatorVisibility="None"
+                RefreshCommand="{Binding LoadTopRatedTvShowsCommand}"
+                IsPullToRefreshEnabled="true"
+                IsRefreshing="{Binding IsBusy, Mode=OneWay}"
+                BackgroundColor="{StaticResource DarkBackgroundColor}">
+                <x:Arguments>
+                    <ListViewCachingStrategy>RecycleElement</ListViewCachingStrategy>
+                </x:Arguments>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid Margin="5, 5, 5, 0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="200"/>
+                                </Grid.RowDefinitions>
+                                <ffimageloading:CachedImage
+                                    Grid.Row="0"
+                                    Margin="0"
+                                    HorizontalOptions="FillAndExpand"
+                                    VerticalOptions="FillAndExpand"
+                                    AutomationId="ImageViewCell"
+                                    Source="{Binding BackdropPath, StringFormat='https://image.tmdb.org/t/p/w500/{0}'}"
+                                    LoadingPlaceholder="placeholder_landscape.png"
+                                    DownsampleToViewSize="True"
+                                    Aspect="AspectFill" />
+                                <Frame
+                                    Grid.Row="0"
+                                    VerticalOptions="End"
+                                    HasShadow="false"
+                                    Padding="0"
+                                    Margin="0"
+                                    HeightRequest="80"
+                                    CornerRadius="0"
+                                    BackgroundColor="{StaticResource BlackTransparentColor}"
+                                    HorizontalOptions="FillAndExpand">
+                                    <StackLayout Margin="8, 5, 8, 5" Orientation="Vertical">
+                                        <Label
+                                            Text="{Binding Name}"
+                                            LineBreakMode="NoWrap"
+                                            Style="{DynamicResource ListItemTextStyle}"
+                                            TextColor="{StaticResource WhiteColor}"
+                                            FontSize="16"
+                                            FontAttributes="Bold" />
+                                        <Label
+                                            Text="{Binding Popularity, Converter={StaticResource popularityDescription}}"
+                                            LineBreakMode="NoWrap"
+                                            Style="{DynamicResource ListItemDetailTextStyle}"
+                                            TextColor="{StaticResource YellowColor}"
+                                            FontSize="12" />
+                                        <Label
+                                            Text="{Binding FirstAirDate, StringFormat='{0:D}'}"
+                                            LineBreakMode="NoWrap"
+                                            Style="{DynamicResource ListItemDetailTextStyle}"
+                                            TextColor="{StaticResource WhiteColor}"
+                                            FontSize="12" />
+                                    </StackLayout>
+                                </Frame>
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+                <ListView.Behaviors>
+                    <b:EventToCommandBehavior 
+                        EventName="ItemTapped"
+                        Command="{Binding ShowTvShowDetailCommand}"
+                        EventArgsConverter="{StaticResource itemTappedEventArgsConverter}" />
+                    <b:EventToCommandBehavior
+                        EventName="ItemAppearing"
+                        Command="{Binding ItemAppearingCommand}"
+                        EventArgsConverter="{StaticResource itemAppearingEventArgsConverter}" />
+                </ListView.Behaviors>
+            </ListView>
+            <Frame
+                CornerRadius="0"
+                HasShadow="false"
+                IsVisible="{Binding IsConnected, Converter={StaticResource inverter}}"
+                VerticalOptions="FillAndExpand">
+                <StackLayout>
+                    <Label
+                        Text="{Binding MessageInternetConnectionFailed}"
+                        HorizontalTextAlignment="Center"
+                        VerticalTextAlignment="Center" />
+                    <Button
+                        Text="{Binding [Try again]}"
+                        Command="{Binding LoadTopRatedTvShowsCommand}"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center"
+                        WidthRequest="140"
+                        BackgroundColor="{StaticResource PrimaryColor}"
+                    TextColor="{StaticResource WhiteColor}" />
+                </StackLayout>
+            </Frame>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
